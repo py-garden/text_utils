@@ -1,5 +1,8 @@
 from typing import List, Dict
 
+def to_camel_case(name: str) -> str:
+    """Convert an underscore_separated string to CamelCase."""
+    return ''.join(word.capitalize() for word in name.split('_'))
 
 def insert_and_clobber(main_str: str, insert_str: str, index: int) -> str:
     # Ensure index is within valid range
