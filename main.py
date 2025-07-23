@@ -1,4 +1,5 @@
 from typing import List, Dict
+import re
 
 def to_camel_case(name: str) -> str:
     """Convert an underscore_separated string to CamelCase."""
@@ -12,12 +13,27 @@ def insert_and_clobber(main_str: str, insert_str: str, index: int) -> str:
     return main_str[:index] + insert_str + main_str[index + len(insert_str):]
 
 
+def map_words_to_abbreviations(words: List[str]) -> Dict[str, str]:
+    """
+    Takes a list of unique snake_case words and returns a dictionary mapping
+    each word to a unique abbreviation.
+    """
+    abbreviation_to_word = {}
+    word_to_abbreviation = {}
+
+    for word in words:
+        abbr = generate_unique_abbreviation(abbreviation_to_word, word)
+        word_to_abbreviation[word] = abbr
+
+    return word_to_abbreviation
+
 def generate_abbreviation(snake_case_name: str) -> str:
     """
     Generates an abbreviation from a snake_case name.
     """
-    words = snake_case_name.split('_')
-    return ''.join(word[0].upper() for word in words if word)
+    # NOTE: using /, \, _, -, and . as delimiters,
+    words = re.split(r'[\/\\_\-\.]', snake_case_name)
+    return ''.join(word[0] for word in words if word)
 
 
 def generate_unique_abbreviation(abbreviation_to_word: Dict[str, str], word_to_abbreviate: str) -> str:
